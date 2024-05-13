@@ -28,16 +28,28 @@
     <label for="dwother">Density Weight (Others)</label>
     <input type="number" id="dwother" value="0.25"/>
     <br/>
-    <button onclick="update()">Apply</button>
+    <br/>
+    <button onclick="toggleNumbers()">Toggle Numbers</button>
+    <br/>
+    <br/>
+    <button onclick="update(true)">Apply</button>
 </div>
 
 <script>
     const _val = id => parseFloat(document.getElementById(id).value);
+    let counts;
+    let showNumbers = true;
 
-    function update() {
+    function toggleNumbers() {
+        showNumbers = !showNumbers;
+        update(false);
+    }
+
+    function update(force) {
         const maxCount = _val("maxcount");
         const minCount = _val("mincount");
-        const counts = Array.from({ length: 35 }, () => Math.floor(Math.random() * (maxCount - minCount + 1)) + minCount);
+
+        if (force) counts = Array.from({ length: 35 }, () => Math.floor(Math.random() * (maxCount - minCount + 1)) + minCount);
 
         function getColor(value) {
             // Interpolating between light green (#E6F4EA) and your darkest green (#3ea680)
@@ -55,7 +67,7 @@
                 div.className = 'day';
                 const scaledValue = scaleFunction(count);
                 div.style.backgroundColor = getColor(scaledValue);
-                div.textContent = count;
+                div.innerHTML = showNumbers ? "&nbsp;" : count;
                 container.appendChild(div);
             });
         }
@@ -76,7 +88,7 @@
         });
     }
 
-    update();
+    update(true);
 </script>
 
 </body>
